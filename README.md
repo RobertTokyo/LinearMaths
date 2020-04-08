@@ -1,2 +1,0 @@
-# LinearMaths
-Linear Mathematics Toolkit
