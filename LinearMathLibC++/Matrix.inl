@@ -1,0 +1,157 @@
+#include "pch.h"
+#include "Matrix.h"
+
+// 02/04/2020 Added to Git
+namespace LinearAlgebra
+{
+	template<class T>
+	Matrix<T>::Matrix(std::vector<std::vector<T>> m)
+	{
+		for (auto r : m)
+			addRow(r);
+	}
+
+	template<class T>
+	Matrix<T>::Matrix(const Matrix<T>& other) 
+	{
+	};
+
+	template<class T>
+	const std::vector<T>& Matrix<T>::operator[](size_t index) const
+	{
+		if (index >= matrix.size())
+			throw std::exception("Index out of range");
+		
+		return matrix[index];
+	}
+
+	template<class T>
+	std::pair<size_t, size_t> Matrix<T>::getDimensions() const
+	{
+		size_t cols = matrix.size();
+		size_t rows{};
+		for (std::vector<T> v : matrix)
+		{
+			size_t n = v.size();
+			if (n > rows)
+				rows = n;
+		}
+		return std::make_pair(rows, cols);
+	}
+
+	template<class T>
+	void Matrix<T>::addRow(std::vector<T> row)
+	{
+		matrix.push_back(row);
+	}
+
+	/*template<class T>
+	Matrix<T> Matrix<T>::operator+(const Matrix<T>& r)
+	{
+		std::pair<size_t, size_t> dimL = l.getDimensions();
+		std::pair<size_t, size_t> dimR = l.getDimensions();
+		if (dimL.first != dimR.first || dimL.second != dimR.second)
+			throw std::exception("matrices are not complient");
+
+		Matrix<T> res;
+		for (size_t i = 0; i < dimL.first; i++)
+		{
+			std::vector<T> row;
+			for (size_t j = 0; j < dimL.second; j++)
+			{
+				row.push_back(l[i][j] + r[i][j]);
+			}
+			res.addRow(row);
+		}
+		return res;
+	}*/
+
+	template<class T>
+	Matrix<T> operator+(const Matrix<T>& l, const Matrix<T>& r)
+	{
+		std::pair<size_t, size_t> dimL = l.getDimensions();
+		std::pair<size_t, size_t> dimR = l.getDimensions();
+		if (dimL.first != dimR.first || dimL.second != dimR.second)
+			throw std::exception("matrices are not complient");
+		
+		Matrix<T> res;
+		for (size_t i = 0; i < dimL.first; i++)
+		{
+			std::vector<T> row;
+			std::vector<T> lr = l[i];
+			std::vector<T> rr = l[i];
+			for (size_t j = 0; j < dimL.second; j++)
+			{
+				row.push_back(lr[j] + rr[j]);
+			}
+			res.addRow(row);
+		}
+		return res;
+	}
+
+	template<class T>
+	Matrix<T> operator-(Matrix<T>& l, Matrix<T>& r)
+	{
+		std::pair<size_t, size_t> dimL = l.getDimensions();
+		std::pair<size_t, size_t> dimR = l.getDimensions();
+		if (dimL.first != dimR.first || dimL.second != dimR.second)
+			throw std::exception("matrices are not complient");
+
+		Matrix<T> res;
+		for (size_t i = 0; i < dimL.first; i++)
+		{
+			std::vector<T> row;
+			for (size_t j = 0; j < dimL.second; j++)
+			{
+				row.push_back(l[i][j] - r[i][j]);
+			}
+			res.addRow(row);
+		}
+		return res;
+	}
+
+	template<class T>
+	Matrix<T> operator*(Matrix<T>& l, Matrix<T>& r)
+	{
+		std::pair<size_t, size_t> dimL = l.getDimensions();
+		std::pair<size_t, size_t> dimR = l.getDimensions();
+		if (dimL.first != dimR.first || dimL.second != dimR.second)
+			throw std::exception("matrices are not complient");
+
+		Matrix<T> res;
+		for (size_t i = 0; i < dimL.first; i++)
+		{
+			std::vector<T> row;
+			for (size_t j = 0; j < dimL.second; j++)
+			{
+				row.push_back(l[i][j] * r[i][j]);
+			}
+			res.addRow(row);
+		}
+		return res;
+	}
+
+	template<class T>
+	Matrix<T> operator/(Matrix<T>& l, Matrix<T>& r)
+	{
+		std::pair<size_t, size_t> dimL = l.getDimensions();
+		std::pair<size_t, size_t> dimR = l.getDimensions();
+		if (dimL.first != dimR.first || dimL.second != dimR.second)
+			throw std::exception("matrices are not complient");
+
+		Matrix<T> res;
+		for (size_t i = 0; i < dimL.first; i++)
+		{
+			std::vector<T> row;
+			for (size_t j = 0; j < dimL.second; j++)
+			{
+				row.push_back(l[i][j] / r[i][j]);
+			}
+			res.addRow(row);
+		}
+		return res;
+	}
+
+}//LinearAlgebra
+
+//End of file
